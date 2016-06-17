@@ -33,10 +33,17 @@ public class AwsService {
     }
     
     
+//    @POST
+//    @Path("/financial")
+//    @Consumes(MediaType.APPLICATION_JSON)
+//    public Response createFinancialData(@HeaderParam("finstr") String finstr,@HeaderParam("sfid") String sfid,@HeaderParam("cmptype") String cmptype) throws ParseException, SQLException, ClassNotFoundException {
+//        return Response.status(201).entity(FinancialManager.insertFinancialRecManager(finstr,sfid,cmptype)).build();
+//    }
+    
     @POST
     @Path("/financial")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response createFinancialData(@HeaderParam("finstr") String finstr,@HeaderParam("sfid") String sfid,@HeaderParam("cmptype") String cmptype) throws ParseException, SQLException, ClassNotFoundException {
+    public Response createFinancialData(String finstr,@HeaderParam("sfid") String sfid,@HeaderParam("cmptype") String cmptype) throws ParseException, SQLException, ClassNotFoundException {
         return Response.status(201).entity(FinancialManager.insertFinancialRecManager(finstr,sfid,cmptype)).build();
     }
     
@@ -45,6 +52,15 @@ public class AwsService {
     @Consumes(MediaType.APPLICATION_JSON)
     public Response test(@HeaderParam("test") String test) throws ParseException, SQLException, ClassNotFoundException {
         return Response.status(201).entity("Welcome "+test).build();
+    }
+    
+    @POST
+    @Path("/testbody")   
+    public Response someMethod(String x,@HeaderParam("data") String data) {
+
+        System.out.println("x");
+        return Response.status(201).entity("Welcome "+x+"===="+data).build();        // process string x, for example parse using JAXB and so on ...
+
     }
     
     @GET

@@ -14,6 +14,15 @@ public class PrivateFinancial {
     public void setCmptype(String cmptype) {
         this.cmptype = cmptype;
     }
+    public String tabtype;
+
+    public String getTabtype() {
+        return tabtype;
+    }
+
+    public void setTabtype(String tabtype) {
+        this.tabtype = tabtype;
+    }
 
     public String getCurrency() {
         return currency;
@@ -30,9 +39,9 @@ public class PrivateFinancial {
     public void setDenomination(String denomination) {
         this.denomination = denomination;
     }
-     public String currency;
-     public String denomination;
-     public String cmptype;
+    public String currency;
+    public String denomination;
+    public String cmptype;
     // Year
     public String year;
     // Company Id
@@ -53,7 +62,7 @@ public class PrivateFinancial {
     public String rd;
     // S&M
     public String sm;
-        // G & A
+    // G & A
     public String ga;
     // Other Expense
     public String oe;
@@ -129,8 +138,6 @@ public class PrivateFinancial {
     public String cac;
     // LTV/CAC
     public String ltvac;
-
-    
 
     public String getGm() {
         return gm;

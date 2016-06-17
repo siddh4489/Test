@@ -13,6 +13,15 @@ public class PublicFinancial {
     // Company Type
     public String cmptype;
 
+    public String getTabtype() {
+        return tabtype;
+    }
+
+    public void setTabtype(String tabtype) {
+        this.tabtype = tabtype;
+    }
+    public String tabtype;
+
     public String getCmptype() {
         return cmptype;
     }
