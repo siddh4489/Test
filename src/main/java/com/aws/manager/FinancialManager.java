@@ -5,10 +5,12 @@
  */
 package com.aws.manager;
 
+import com.aws.connection.AwsConnection;
 import com.aws.datamanager.FinancialDataManager;
 import com.aws.model.PrivateFinancial;
 import com.aws.model.FinancialModel;
 import com.aws.model.PublicFinancial;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +25,7 @@ import org.json.simple.parser.ParseException;
 public class FinancialManager {
 
         public static String insertFinancialRecManager(String finData, String sfid, String cmptype) throws ParseException, SQLException, ClassNotFoundException {
+        Connection conn = AwsConnection.getConnection();
         JSONParser parser = new JSONParser();
         JSONObject json = (JSONObject) parser.parse(finData);
         String retunStr;
@@ -52,6 +55,7 @@ public class FinancialManager {
                 fobj = new PrivateFinancial();
                 fobj.setCmptype(cmptype);
                 fobj.setSfid(sfid);
+                fobj.setSfdcunique(sfid+'_'+i);
                 fobj.setTabtype((String) json.get("tabtype"));
                 fobj.setCurrency((String) json.get("currency"));
                 fobj.setDenomination((String) json.get("denomination"));
@@ -105,7 +109,7 @@ public class FinancialManager {
                 priFinList.add(fobj);
             }
             finObj.setPrivatelst(priFinList);
-            retunStr = FinancialDataManager.insertPrivateFinancialDataManager(finObj);
+            retunStr = FinancialDataManager.bypassFinancialRecord(conn,finObj);
         } else {
             PublicFinancial pobj = new PublicFinancial();
             for (int i = 0; i < 8; i++) {
@@ -181,10 +185,12 @@ public class FinancialManager {
                 pubFinList.add(pobj);
             }
             finObj.setPubliclst(pubFinList);
-            retunStr = FinancialDataManager.insertPublicFinancialDataManager(finObj);
+            retunStr = FinancialDataManager.insertPublicFinancialDataManager(conn,finObj);
         }
 
         return retunStr;
     }
+        
+        
 
 }

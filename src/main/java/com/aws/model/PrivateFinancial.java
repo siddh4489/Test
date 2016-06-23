@@ -40,6 +40,15 @@ public class PrivateFinancial {
         this.denomination = denomination;
     }
     public String currency;
+    public String sfdcunique;
+
+    public String getSfdcunique() {
+        return sfdcunique;
+    }
+
+    public void setSfdcunique(String sfdcunique) {
+        this.sfdcunique = sfdcunique;
+    }
     public String denomination;
     public String cmptype;
     // Year
