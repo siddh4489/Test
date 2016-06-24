@@ -109,13 +109,14 @@ public class FinancialManager {
                 priFinList.add(fobj);
             }
             finObj.setPrivatelst(priFinList);
-            retunStr = FinancialDataManager.bypassFinancialRecord(conn,finObj);
+            retunStr = FinancialDataManager.bypassFinancialRecord(conn,finObj,cmptype);
         } else {
             PublicFinancial pobj = new PublicFinancial();
             for (int i = 0; i < 8; i++) {
                 pobj = new PublicFinancial();
                 pobj.setCmptype(cmptype);
                 pobj.setSfid(sfid);
+                pobj.setSfdcunique(sfid+'_'+i);
                 pobj.setTabtype((String) json.get("tabtype"));
                 pobj.setCurrency((String) json.get("currency"));
                 pobj.setDenomination((String) json.get("denomination"));
@@ -185,7 +186,7 @@ public class FinancialManager {
                 pubFinList.add(pobj);
             }
             finObj.setPubliclst(pubFinList);
-            retunStr = FinancialDataManager.insertPublicFinancialDataManager(conn,finObj);
+            retunStr = FinancialDataManager.bypassFinancialRecord(conn,finObj,cmptype);
         }
 
         return retunStr;

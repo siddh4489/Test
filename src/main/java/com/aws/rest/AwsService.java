@@ -51,9 +51,17 @@ public class AwsService {
     @POST
     @Path("/getprivaterecord")
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response test(@HeaderParam("sfid") String sfid) throws ParseException, SQLException, ClassNotFoundException {
+    public Response getprivateRecord(@HeaderParam("sfid") String sfid) throws ParseException, SQLException, ClassNotFoundException {
         Connection conn = AwsConnection.getConnection();
-        return Response.status(201).entity(FinancialDataManager.getPrivateRecord(conn,sfid)).build();
+        return Response.status(201).entity(FinancialDataManager.getPrivateRecord(conn, sfid)).build();
+    }
+
+    @POST
+    @Path("/getpublicrecord")
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response getPublicRecord(@HeaderParam("sfid") String sfid) throws ParseException, SQLException, ClassNotFoundException {
+        Connection conn = AwsConnection.getConnection();
+        return Response.status(201).entity(FinancialDataManager.getPublicRecord(conn, sfid)).build();
     }
 
     @POST

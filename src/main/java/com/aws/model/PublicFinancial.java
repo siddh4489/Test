@@ -10,8 +10,19 @@ package com.aws.model;
  * @author Siddharaj Atodaria
  */
 public class PublicFinancial {
+
     // Company Type
+
     public String cmptype;
+
+    public String getSfdcunique() {
+        return sfdcunique;
+    }
+
+    public void setSfdcunique(String sfdcunique) {
+        this.sfdcunique = sfdcunique;
+    }
+    public String sfdcunique;
 
     public String getTabtype() {
         return tabtype;
@@ -29,8 +40,8 @@ public class PublicFinancial {
     public void setCmptype(String cmptype) {
         this.cmptype = cmptype;
     }
-     public String currency;
-     public String denomination;
+    public String currency;
+    public String denomination;
 
     public String getCurrency() {
         return currency;
@@ -47,7 +58,7 @@ public class PublicFinancial {
     public void setDenomination(String denomination) {
         this.denomination = denomination;
     }
-    
+
     // Company Id
     public String sfid;
     // Year
@@ -65,125 +76,126 @@ public class PublicFinancial {
         this.pure = pure;
     }
     // Revenue
-    public String purev ;
+    public String purev;
     // Gross Margin
-    public String pugm ;
+    public String pugm;
     // EBITDA
-    public String puebitba ;
+    public String puebitba;
     // Cost of Revenue
-    public String pucor ;
+    public String pucor;
     // Gross Profit
-    public String pugp ;
+    public String pugp;
     // R & D
-    public String purd ;
+    public String purd;
     // SGA
-    public String pusga ;
+    public String pusga;
     // Non Recurring
-    public String punr ;
+    public String punr;
     // Negative Goodwill
-    public String pungw ;
+    public String pungw;
     // Total Liabilities
-    public String putotlia ;
+    public String putotlia;
     // Misc Stock Options Warrants
-    public String pumsow ;
+    public String pumsow;
     // Redeemable Preferred Stock
-    public String purps ;
+    public String purps;
     // Preferred Stock
-    public String pups ;
+    public String pups;
     // Common Stock
-    public String pucs ;
+    public String pucs;
     // Treasury Stock
-    public String puts ;
+    public String puts;
     // Capital Surplus
-    public String pucas ;
+    public String pucas;
     // Other Stockholder Equity
-    public String puose ;
+    public String puose;
     // Total Equity
-    public String putote ;
+    public String putote;
     // Total Liabilites & Equity
-    public String putle ;
+    public String putle;
     // Other Expense
-    public String puoe ;
+    public String puoe;
     // Total Expense
-    public String putoe ;
+    public String putoe;
     // Total Other Income/Expenses Net
-    public String putoien ;
+    public String putoien;
     // EBIT
-    public String puebit ;
+    public String puebit;
     // Interest Expense
-    public String puit ;
+    public String puit;
     // Income Before Tax
-    public String puibt ;
+    public String puibt;
     // Income Tax Expense
-    public String puite ;
+    public String puite;
     // Minority Interest
-    public String pumi ;
+    public String pumi;
     // Discontinued Ops
-    public String pudo ;
+    public String pudo;
     // Extraordinary Items
-    public String puei ;
+    public String puei;
     // Effect of Accounting Changes
-    public String pueoac ;
+    public String pueoac;
     // Other Items
-    public String puoi ;
+    public String puoi;
     // Net Income/(Loss)
-    public String punil ;
+    public String punil;
     // Cash
-    public String pucash ;
+    public String pucash;
     // Total Current Assets
-    public String putca ;
+    public String putca;
     // Total Current Liabilities
-    public String putcl ;
+    public String putcl;
     // Cash and Equivalents
-    public String pucae ;
+    public String pucae;
     // Short Term Investments
-    public String pusti ;
+    public String pusti;
     // Net Receivables
-    public String punre ;
+    public String punre;
     // Inventory
-    public String puinvtry ;
+    public String puinvtry;
     // Other Current Assets
-    public String puoca ;
+    public String puoca;
     // Total Current Assets
-    public String putcass ;
+    public String putcass;
     // Long Term Investments
-    public String pulti ;
+    public String pulti;
     // PP&E
-    public String puppe ;
+    public String puppe;
     // Goodwill
-    public String pugw ;
+    public String pugw;
     // Intangible Assets
-    public String puia ;
+    public String puia;
     // Accumulated Amortization
-    public String puaa ;
+    public String puaa;
     // Other Assets
-    public String puoa ;
+    public String puoa;
     // Deferred Long Term Asset Charges
-    public String pudltac ;
+    public String pudltac;
     // Total Assets
-    public String puta ;
+    public String puta;
     // Short/Current Long Term Debt
-    public String puscltd ;
+    public String puscltd;
     // Accounts Payable
-    public String puap ;
+    public String puap;
     // Other Current Liabilities
-    public String puocl ;
+    public String puocl;
     // Long Term Debt
-    public String pultd ;
+    public String pultd;
     // Other Liabilities
-    public String puolia ;
+    public String puolia;
     // Deferred Long Term Liability Charges
-    public String pudltlc ;
+    public String pudltlc;
     // Minority Interest
-    public String pumino ;
+    public String pumino;
     // FETs
-    public String pufet ;
+    public String pufet;
     // LTV
-    public String pultv ;
+    public String pultv;
     // CAC
-    public String pucac ;
+    public String pucac;
     // LTV/CAC
-    public String pultvac ;
+    public String pultvac;
+
     public String getSfid() {
         return sfid;
     }
@@ -191,8 +203,7 @@ public class PublicFinancial {
     public void setSfid(String sfid) {
         this.sfid = sfid;
     }
-    
-    
+
     public String getPuyear() {
         return puyear;
     }
@@ -688,6 +699,5 @@ public class PublicFinancial {
     public void setPultvac(String pultvac) {
         this.pultvac = pultvac;
     }
-    
-    
+
 }

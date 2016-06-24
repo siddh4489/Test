@@ -20,9 +20,10 @@ public class Test2 {
 
     public static void main(String[] args) throws Exception {
        Connection conn = AwsConnection.getConnection();
-        System.out.println("----"+FinancialDataManager.getPrivateRecord(conn, "0012800000dw2X3"));
+        //System.out.println("--private--"+FinancialDataManager.getPrivateRecord(conn, "0012800000dw2X3"));
+        System.out.println("--public--"+FinancialDataManager.getPublicRecord(conn, "0012800000dw2XIAAY"));
         //FinancialDataManager.update(conn, "0012800000dw2X3_0","2018");
-        //System.out.println("-- delete --"+FinancialDataManager.getDelete(conn, "0012800000dw2X3"));
+       // System.out.println("-- delete --"+FinancialDataManager.getDelete(conn, "0012800000dw2XIAAY"));
     }
 
 }

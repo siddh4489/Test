@@ -25,14 +25,13 @@ import java.util.logging.Logger;
  */
 public class FinancialDataManager {
 
-    public static String insertPrivateFinancialDataManager(FinancialModel fmodel) throws ClassNotFoundException, SQLException {
+    public static String insertPrivateFinancialDataManager(Connection conn,FinancialModel fmodel) throws ClassNotFoundException, SQLException {
         String type = "";
         StringBuilder sqlQuery = new StringBuilder();
         try {
-            Connection conn = AwsConnection.getConnection();
             Statement stmt = null;
             conn.setAutoCommit(false);
-            stmt = conn.createStatement();
+           // stmt = conn.createStatement();
 
             for (int j = 0; j < fmodel.getPrivatelst().size(); j++) {
                 stmt = conn.createStatement();
@@ -120,11 +119,12 @@ public class FinancialDataManager {
 
     public static String insertPublicFinancialDataManager(Connection conn, FinancialModel fmodel) throws ClassNotFoundException, SQLException {
         String type = "";
+        StringBuilder sqlQuery = new StringBuilder();
         try {
             Statement stmt = null;
             conn.setAutoCommit(false);
             stmt = conn.createStatement();
-            StringBuilder sqlQuery = new StringBuilder();
+
             for (int j = 0; j < fmodel.getPubliclst().size(); j++) {
                 stmt = conn.createStatement();
                 type = fmodel.getPubliclst().get(j).tabtype;
@@ -144,7 +144,7 @@ public class FinancialDataManager {
                 sqlQuery.append("\"Minority Interest (BS)\",\"Negative Goodwill Value\",\"Total Liabilities Value\",\"Misc Stocks Options Warrants Value\",");
                 sqlQuery.append("\"Redeemable Preferred Stock Value\",\"Preferred Stock Value\",\"Common Stock Value\",\"Retained Earnings Value\",");
                 sqlQuery.append("\"Treasury Stock Value\",\"Capital Surplus Value\",\"Other Stockholder Equity Value\",\"Total Equity Value\",");
-                sqlQuery.append("\"Total Liabilites & Equity\",\"LTV/CAC Value\",\"Company Type\",\"currencytype\",\"denomination\",\"type\",sfid) ");
+                sqlQuery.append("\"Total Liabilites & Equity\",\"LTV/CAC Value\",\"Company Type\",\"currencytype\",\"denomination\",\"type\",sfid,sfdcunique) ");
                 sqlQuery.append("VALUES (");
                 sqlQuery.append(fmodel.getPubliclst().get(j).puyear + ",");
                 sqlQuery.append("'" + fmodel.getPubliclst().get(j).puqtr + "',");
@@ -208,7 +208,8 @@ public class FinancialDataManager {
                 sqlQuery.append("'" + fmodel.getPubliclst().get(j).currency + "',");
                 sqlQuery.append("'" + fmodel.getPubliclst().get(j).denomination + "',");
                 sqlQuery.append("'" + fmodel.getPubliclst().get(j).tabtype + "',");
-                sqlQuery.append("'" + fmodel.getPubliclst().get(j).sfid + "');");
+                sqlQuery.append("'" + fmodel.getPubliclst().get(j).sfid + "',");
+                sqlQuery.append("'" + fmodel.getPubliclst().get(j).sfdcunique + "');");
                 System.out.println("---sqlQuery----" + sqlQuery);
                 stmt.executeUpdate(sqlQuery.toString());
                 stmt.close();
@@ -229,7 +230,7 @@ public class FinancialDataManager {
     public static String getPrivateRecord(Connection conn, String sfdcId) throws SQLException {
         PreparedStatement pst = null;
         ResultSet rs = null;
-        boolean flag = false;
+
         StringBuilder sqlQuery = new StringBuilder();
         sqlQuery.append("SELECT ");
         sqlQuery.append("\"Year\",\"Quarter\",\"Total Revenue Value\",\"Cost of Revenue Value\",\"Gross Profit Value\",\"Cash\",\"Gross Margin Value\",");
@@ -306,6 +307,111 @@ public class FinancialDataManager {
             jsonstr += "\"cmptype_" + i + "\":\"" + rs.getString("Company Type") + "\",";
             jsonstr += "\"currency_" + i + "\":\"" + rs.getString("currencytype") + "\",";
             jsonstr += "\"denomination_" + i + "\":\"" + rs.getString("denomination") + "\",";
+            i++;
+        }
+        jsonstr = jsonstr.substring(0, jsonstr.length() - 1);;
+        jsonstr += "}";
+
+        return jsonstr;
+    }
+
+        public static String getPublicRecord(Connection conn, String sfdcId) throws SQLException {
+        PreparedStatement pst = null;
+        ResultSet rs = null;
+
+        StringBuilder sqlQuery = new StringBuilder();
+        sqlQuery.append("SELECT ");
+        sqlQuery.append("\"Year\",\"Quarter\",\"Total Revenue Value\",\"Cost of Revenue Value\",");
+        sqlQuery.append("\"Gross Profit Value\",\"Gross Margin\",\"R&D Value\",\"SG&A Value\",");
+        sqlQuery.append("\"Non Recurring Value\",\"Others Value\",\"Total Operating Expenses Value\",\"EBITDA\",");
+        sqlQuery.append("\"Total Other Income Expenses Net Value\",\"EBIT Value\",\"Interest Expense Value\",\"Income Before Tax Value\",");
+        sqlQuery.append("\"Income Tax Expense Value\",\"Minority Interest Value\",\"Discontinued Ops Value\",\"Extraordinary Items Value\",");
+        sqlQuery.append("\"Effect of Accounting Changes Value\",\"Other Items Value\",\"Net Income Value\",\"Cash & Equivalents Value\",");
+        sqlQuery.append("\"Short Term Investments Value\",\"Net Receivables Value\",\"Inventory Value\",\"Other Current Assets Value\",");
+        sqlQuery.append("\"Total Current Assets Value\",\"Long Term Investments Value\",\"PP&E Value\",\"Goodwill Value\",");
+        sqlQuery.append("\"Intangible Assets Value\",\"Accumulated Amortization Value\",\"Other Assets Value\",\"Deferred Long Term Asset Charges Value\",");
+        sqlQuery.append("\"Total Assets Value\",\"Short/Current Long Term Debt Value\",\"Accounts Payable Value\",\"Other Current Liabilities Value\",");
+        sqlQuery.append("\"Total Current Liabilities Value\",\"Long Term Debt Value\",\"Other Liabilities Value\",\"Deferred Long Term Liability Charges Value\",");
+        sqlQuery.append("\"Minority Interest (BS)\",\"Negative Goodwill Value\",\"Total Liabilities Value\",\"Misc Stocks Options Warrants Value\",");
+        sqlQuery.append("\"Redeemable Preferred Stock Value\",\"Preferred Stock Value\",\"Common Stock Value\",\"Retained Earnings Value\",");
+        sqlQuery.append("\"Treasury Stock Value\",\"Capital Surplus Value\",\"Other Stockholder Equity Value\",\"Total Equity Value\",");
+        sqlQuery.append("\"Total Liabilites & Equity\",\"LTV/CAC Value\",\"Company Type\",\"currencytype\",\"denomination\",\"type\",sfid,sfdcunique");
+        sqlQuery.append(" From reports ");
+        sqlQuery.append(" WHERE sfid ='" + sfdcId + "'");
+        sqlQuery.append(" ORDER BY sfdcunique ");
+
+        System.out.println("---sqlQuery---" + sqlQuery);
+        pst = conn.prepareStatement(sqlQuery.toString());
+        rs = pst.executeQuery();
+        int i = 0;
+        String jsonstr = "";
+
+        jsonstr = "{";
+
+        while (rs.next()) {
+            System.out.println(i + " getPublicRecord--sfdcunique---" + rs.getString("sfdcunique"));
+            System.out.println(i + "--Year---" + rs.getString("Year"));
+            jsonstr += "\"puyear_" + i + "\":\"" + rs.getString("Year") + "\",";
+            jsonstr += "\"puqtr _" + i + "\":\"" + rs.getString("Quarter") + "\",";
+            jsonstr += "\"purev_" + i + "\":\"" + rs.getString("Total Revenue Value") + "\",";
+            jsonstr += "\"pucor_" + i + "\":\"" + rs.getString("Cost of Revenue Value") + "\",";
+            jsonstr += "\"pugp_" + i + "\":\"" + rs.getString("Gross Profit Value") + "\",";
+            jsonstr += "\"pugm_" + i + "\":\"" + rs.getString("Gross Margin") + "\",";
+            jsonstr += "\"purd_" + i + "\":\"" + rs.getString("R&D Value") + "\",";
+            jsonstr += "\"pusga_" + i + "\":\"" + rs.getString("SG&A Value") + "\",";
+            jsonstr += "\"punr_" + i + "\":\"" + rs.getString("Non Recurring Value") + "\",";
+            jsonstr += "\"puoe_" + i + "\":\"" + rs.getString("Others Value") + "\",";
+            jsonstr += "\"putoe_" + i + "\":\"" + rs.getString("Total Operating Expenses Value") + "\",";
+            jsonstr += "\"puebitba_" + i + "\":\"" + rs.getString("EBITDA") + "\",";
+            jsonstr += "\"putoien_" + i + "\":\"" + rs.getString("Total Other Income Expenses Net Value") + "\",";
+            jsonstr += "\"puebit_" + i + "\":\"" + rs.getString("EBIT Value") + "\",";
+            jsonstr += "\"puit_" + i + "\":\"" + rs.getString("Interest Expense Value") + "\",";
+            jsonstr += "\"puibt_" + i + "\":\"" + rs.getString("Income Before Tax Value") + "\",";
+            jsonstr += "\"puite_" + i + "\":\"" + rs.getString("Income Tax Expense Value") + "\",";
+            jsonstr += "\"pumi_" + i + "\":\"" + rs.getString("Minority Interest Value") + "\",";
+            jsonstr += "\"pudo_" + i + "\":\"" + rs.getString("Discontinued Ops Value") + "\",";
+            jsonstr += "\"puei_" + i + "\":\"" + rs.getString("Extraordinary Items Value") + "\",";
+            jsonstr += "\"pueoac_" + i + "\":\"" + rs.getString("Effect of Accounting Changes Value") + "\",";
+            jsonstr += "\"puoi_" + i + "\":\"" + rs.getString("Other Items Value") + "\",";
+            jsonstr += "\"punil_" + i + "\":\"" + rs.getString("Net Income Value") + "\",";
+            jsonstr += "\"pucae_" + i + "\":\"" + rs.getString("Cash & Equivalents Value") + "\",";
+            jsonstr += "\"pusti_" + i + "\":\"" + rs.getString("Short Term Investments Value") + "\",";
+            jsonstr += "\"punre_" + i + "\":\"" + rs.getString("Net Receivables Value") + "\",";
+            jsonstr += "\"puinvtry_" + i + "\":\"" + rs.getString("Inventory Value") + "\",";
+            jsonstr += "\"puoca_" + i + "\":\"" + rs.getString("Other Current Assets Value") + "\",";
+            jsonstr += "\"putca_" + i + "\":\"" + rs.getString("Total Current Assets Value") + "\",";
+            jsonstr += "\"pulti_" + i + "\":\"" + rs.getString("Long Term Investments Value") + "\",";
+            jsonstr += "\"puppe_" + i + "\":\"" + rs.getString("PP&E Value") + "\",";
+            jsonstr += "\"pugw_" + i + "\":\"" + rs.getString("Goodwill Value") + "\",";
+            jsonstr += "\"puia_" + i + "\":\"" + rs.getString("Intangible Assets Value") + "\",";
+            jsonstr += "\"puoa_" + i + "\":\"" + rs.getString("Other Assets Value") + "\",";
+            jsonstr += "\"pudltac_" + i + "\":\"" + rs.getString("Deferred Long Term Asset Charges Value") + "\",";
+            jsonstr += "\"puta_" + i + "\":\"" + rs.getString("Total Assets Value") + "\",";
+            jsonstr += "\"puscltd_" + i + "\":\"" + rs.getString("Short/Current Long Term Debt Value") + "\",";
+            jsonstr += "\"puap_" + i + "\":\"" + rs.getString("Accounts Payable Value") + "\",";
+            jsonstr += "\"puocl_" + i + "\":\"" + rs.getString("Other Current Liabilities Value") + "\",";
+            jsonstr += "\"putcl_" + i + "\":\"" + rs.getString("Total Current Liabilities Value") + "\",";
+            jsonstr += "\"pultd_" + i + "\":\"" + rs.getString("Long Term Debt Value") + "\",";
+            jsonstr += "\"puolia_" + i + "\":\"" + rs.getString("Other Liabilities Value") + "\",";
+            jsonstr += "\"pudltlc_" + i + "\":\"" + rs.getString("Deferred Long Term Liability Charges Value") + "\",";
+            jsonstr += "\"pumi_" + i + "\":\"" + rs.getString("Minority Interest (BS)") + "\",";
+            jsonstr += "\"pungw_" + i + "\":\"" + rs.getString("Negative Goodwill Value") + "\",";
+            jsonstr += "\"putotlia_" + i + "\":\"" + rs.getString("Total Liabilities Value") + "\",";
+            jsonstr += "\"pumsow_" + i + "\":\"" + rs.getString("Misc Stocks Options Warrants Value") + "\",";
+            jsonstr += "\"purps_" + i + "\":\"" + rs.getString("Redeemable Preferred Stock Value") + "\",";
+            jsonstr += "\"pups_" + i + "\":\"" + rs.getString("Preferred Stock Value") + "\",";
+            jsonstr += "\"pucs_" + i + "\":\"" + rs.getString("Common Stock Value") + "\",";
+            jsonstr += "\"pure_" + i + "\":\"" + rs.getString("Retained Earnings Value") + "\",";
+            jsonstr += "\"puts_" + i + "\":\"" + rs.getString("Treasury Stock Value") + "\",";
+            jsonstr += "\"pucs_" + i + "\":\"" + rs.getString("Capital Surplus Value") + "\",";
+            jsonstr += "\"puose_" + i + "\":\"" + rs.getString("Other Stockholder Equity Value") + "\",";
+            jsonstr += "\"putote_" + i + "\":\"" + rs.getString("Total Equity Value") + "\",";
+            jsonstr += "\"putle_" + i + "\":\"" + rs.getString("Total Liabilites & Equity") + "\",";
+            jsonstr += "\"pultvac_" + i + "\":\"" + rs.getString("LTV/CAC Value") + "\",";
+            jsonstr += "\"cmptype_" + i + "\":\"" + rs.getString("Company Type") + "\",";
+            jsonstr += "\"currency_" + i + "\":\"" + rs.getString("currencytype") + "\",";
+            jsonstr += "\"denomination _" + i + "\":\"" + rs.getString("denomination") + "\",";
+
             i++;
         }
         jsonstr = jsonstr.substring(0, jsonstr.length() - 1);;
@@ -399,15 +505,27 @@ public class FinancialDataManager {
         return flag;
     }
 
-    public static String bypassFinancialRecord(Connection conn, FinancialModel finObj) throws SQLException, ClassNotFoundException {
+    public static String bypassFinancialRecord(Connection conn, FinancialModel finObj, String cmpType) throws SQLException, ClassNotFoundException {
         String result = "";
-        if (checkFinancialRecord(conn, finObj.getPrivatelst().get(0).sfid)) {
-            System.out.println("----update---");
-            result = updatePrivateFinancialDataManager(conn, finObj);
-            //result = update(conn, finObj);
+
+         if (cmpType.equalsIgnoreCase("private")) {
+            if (checkFinancialRecord(conn, finObj.getPrivatelst().get(0).sfid)) {
+                System.out.println("----update---");
+                result = updatePrivateFinancialDataManager(conn, finObj);
+                //result = update(conn, finObj);
+            } else {
+                System.out.println("----insert---");
+                result = insertPrivateFinancialDataManager(conn, finObj);
+            }
         } else {
-            System.out.println("----insert---");
-            result = insertPublicFinancialDataManager(conn, finObj);
+            if (checkFinancialRecord(conn, finObj.getPubliclst().get(0).sfid)) {
+                System.out.println("----update---");
+                result = updatePrivateFinancialDataManager(conn, finObj);
+                //result = update(conn, finObj);
+            } else {
+                System.out.println("----insert---");
+                result = insertPublicFinancialDataManager(conn, finObj);
+            }
         }
 
         return result;
